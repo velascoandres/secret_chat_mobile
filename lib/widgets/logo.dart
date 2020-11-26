@@ -8,10 +8,11 @@ class Logo extends StatelessWidget {
     return Center(
       child: Container(
         width: 170,
+        padding: EdgeInsets.only(top: 50),
         child: Column(
           children: [
             Image(
-              image: AssetImage('assets/logos/sword.png'),
+              image: AssetImage('assets/logos/dart-logo.png'),
             ),
             Text(
               'Secret Chat',

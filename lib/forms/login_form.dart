@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
-
 class LoginForm extends StatefulWidget {
   LoginForm({Key key}) : super(key: key);
 
@@ -12,7 +11,8 @@ class LoginForm extends StatefulWidget {
 
 class _LoginFormState extends State<LoginForm> {
   final TextEditingController emailTextController = new TextEditingController();
-  final TextEditingController passwordTextController = new TextEditingController();
+  final TextEditingController passwordTextController =
+      new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +20,7 @@ class _LoginFormState extends State<LoginForm> {
       margin: EdgeInsets.only(
         top: 40,
       ),
+      padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
           CustomInputField(
@@ -35,13 +36,13 @@ class _LoginFormState extends State<LoginForm> {
             textEditingController: passwordTextController,
           ),
           BotonAzul(
-                titulo: 'Ingresar',
-                onPressed: () {
-                  print('Valores: ');
-                  print(this.emailTextController.value);
-                  print(this.passwordTextController.value);
-                },
-              )
+            titulo: 'Ingresar',
+            onPressed: () {
+              print('Valores: ');
+              print(this.emailTextController.value);
+              print(this.passwordTextController.value);
+            },
+          )
         ],
       ),
     );
