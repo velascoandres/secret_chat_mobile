@@ -1,12 +1,21 @@
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 class Labels extends StatelessWidget {
+  final GestureDoubleTapCallback onTap;
+  final String tapTitle;
+  final String title;
+
+  Labels(
+      {Key key, @required this.onTap, @required this.tapTitle, this.title = ''})
+      : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     return Column(
       children: [
         Text(
-          '¿No tienes cuenta?',
+          this.title,
           style: TextStyle(
             color: Colors.black54,
             fontSize: 15,
@@ -16,12 +25,15 @@ class Labels extends StatelessWidget {
         SizedBox(
           height: 10,
         ),
-        Text(
-          'Crea una cuenta ahora!',
-          style: TextStyle(
-            color: Colors.blue[600],
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        GestureDetector(
+          onTap: this.onTap,
+          child: Text(
+            this.tapTitle,
+            style: TextStyle(
+              color: Colors.blue[600],
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
           ),
         ),
       ],

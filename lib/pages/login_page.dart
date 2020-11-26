@@ -15,9 +15,16 @@ class LoginPage extends StatelessWidget {
             child: Column(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                Logo(),
+                Logo(
+                  titulo: 'Secret Chat',
+                ),
                 LoginForm(),
-                Labels(),
+                Labels(
+                  title: '¿No tienes cuenta?',
+                  tapTitle: 'Crea una cuenta ahora!',
+                  onTap: () =>
+                      Navigator.pushReplacementNamed(context, 'register'),
+                ),
                 Text(
                   'Términos y condiciones de uso',
                   style: TextStyle(
