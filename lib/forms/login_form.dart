@@ -20,7 +20,6 @@ class _LoginFormState extends State<LoginForm> {
       margin: EdgeInsets.only(
         top: 40,
       ),
-      padding: EdgeInsets.symmetric(horizontal: 50),
       child: Column(
         children: [
           CustomInputField(
@@ -35,10 +34,14 @@ class _LoginFormState extends State<LoginForm> {
             obscure: true,
             textEditingController: passwordTextController,
           ),
-          RaisedButton(
-            child: Text('Ingresar'),
-            onPressed: () {},
-          ),
+          BotonAzul(
+                titulo: 'Ingresar',
+                onPressed: () {
+                  print('Valores: ');
+                  print(this.emailTextController.value);
+                  print(this.passwordTextController.value);
+                },
+              )
         ],
       ),
     );
