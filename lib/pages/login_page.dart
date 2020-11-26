@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 
-import 'package:secret_chat_mobile/colors/colors.dart';
-import 'package:secret_chat_mobile/forms/login_form.dart';
-import 'package:secret_chat_mobile/widgets/labels.dart';
-import 'package:secret_chat_mobile/widgets/logo.dart';
+import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
 class LoginPage extends StatelessWidget {
   @override

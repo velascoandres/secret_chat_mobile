@@ -6,14 +6,17 @@ class CustomInputField extends StatelessWidget {
   final IconData prefixIcon;
   final TextInputType textInputType;
   final bool autocorrect;
+  final TextEditingController textEditingController;
 
   CustomInputField({
+    Key key,
     @required this.hint,
     @required this.prefixIcon,
+    @required this.textEditingController,
     this.textInputType = TextInputType.text,
     this.obscure = false,
     this.autocorrect = false,
-  }) : super();
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -32,6 +35,7 @@ class CustomInputField extends StatelessWidget {
         ],
       ),
       child: TextField(
+        controller: this.textEditingController,
         obscureText: this.obscure,
         autocorrect: false,
         keyboardType: this.textInputType,
