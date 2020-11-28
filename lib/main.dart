@@ -8,7 +8,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Caht App',
-      initialRoute: 'login',
+      initialRoute: 'usuarios',
       routes: appRoutes,
     );
   }
