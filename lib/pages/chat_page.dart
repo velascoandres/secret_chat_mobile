@@ -11,6 +11,7 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = new TextEditingController();
   final FocusNode _focusNode = new FocusNode();
+  bool _estaEscribiendo = false;
 
   @override
   Widget build(BuildContext context) {
@@ -71,7 +72,8 @@ class _ChatPageState extends State<ChatPage> {
               child: TextField(
                 controller: this._textController,
                 onSubmitted: this._manejarEnvioMensaje,
-                onChanged: (String texto) {},
+                onChanged: (String texto) =>
+                    setState(() => this._estaEscribiendo = texto != ''),
                 decoration: InputDecoration.collapsed(
                   hintText: 'Escribe tu mensaje',
                 ),
@@ -91,22 +93,30 @@ class _ChatPageState extends State<ChatPage> {
   Widget _botonEnviar() {
     if (Platform.isIOS) {
       return CupertinoButton(
-          child: Text('Enviar'), onPressed: this._enviarMensaje);
+          child: Text('Enviar'),
+          onPressed: this._estaEscribiendo ? this._enviarMensaje : null);
     } else {
       return Container(
         margin: EdgeInsets.symmetric(horizontal: 4.0),
-        child: IconButton(
-          onPressed: this._enviarMensaje,
-          icon: Icon(
-            Icons.send,
-            color: Colors.blue[400],
+        child: IconTheme(
+          data: IconThemeData(color: Colors.blue[400]),
+          child: IconButton(
+            highlightColor: Colors.transparent,
+            splashColor: Colors.transparent,
+            onPressed: this._estaEscribiendo ? this._enviarMensaje : null,
+            icon: Icon(
+              Icons.send,
+            ),
           ),
         ),
       );
     }
   }
 
-  void _enviarMensaje() {}
+  void _enviarMensaje() {
+    this._manejarEnvioMensaje(this._textController.text.trim());
+  }
+
   void _manejarEnvioMensaje(String mensaje) {
     this._textController.clear();
     this._focusNode.requestFocus();
