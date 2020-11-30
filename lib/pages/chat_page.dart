@@ -165,4 +165,14 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     this._textController.clear();
     this._focusNode.requestFocus();
   }
+
+  @override
+  void dispose() {
+    // TODO:  Off del socket
+    this.messagesChat.forEach(
+          (MessageChat messageChat) =>
+              messageChat.animationController.dispose(),
+        );
+    super.dispose();
+  }
 }
