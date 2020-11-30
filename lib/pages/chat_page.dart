@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
 class ChatPage extends StatefulWidget {
   @override
@@ -11,6 +12,36 @@ class ChatPage extends StatefulWidget {
 class _ChatPageState extends State<ChatPage> {
   final TextEditingController _textController = new TextEditingController();
   final FocusNode _focusNode = new FocusNode();
+
+  List<MessageChat> messagesChat = [
+    MessageChat(
+      uuid: '123',
+      texto: 'Hola mundasdasdasdo',
+    ),
+    MessageChat(
+      uuid: '122',
+      texto:
+          'Holahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh muasdasdndo',
+    ),
+    MessageChat(
+      uuid: '123',
+      texto:
+          'Holahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh muasdasdndo',
+    ),
+    MessageChat(
+      uuid: '123',
+      texto: 'Hola munssdsdsddo x2',
+    ),
+    MessageChat(
+      uuid: '123',
+      texto: 'Hola madasdundo x2',
+    ),
+    MessageChat(
+      uuid: '123',
+      texto: 'Hola muadasdasdndo x2',
+    ),
+  ];
+
   bool _estaEscribiendo = false;
 
   @override
@@ -45,8 +76,9 @@ class _ChatPageState extends State<ChatPage> {
           children: [
             Flexible(
               child: ListView.builder(
+                itemCount: this.messagesChat.length,
                 physics: BouncingScrollPhysics(),
-                itemBuilder: (_, i) => Text(i.toString()),
+                itemBuilder: (_, i) => messagesChat[i],
                 reverse: true,
               ),
             ),
@@ -71,9 +103,9 @@ class _ChatPageState extends State<ChatPage> {
             Flexible(
               child: TextField(
                 controller: this._textController,
-                onSubmitted: this._manejarEnvioMensaje,
+                onSubmitted: this._estaEscribiendo ? this._manejarEnvioMensaje: null,
                 onChanged: (String texto) =>
-                    setState(() => this._estaEscribiendo = texto != ''),
+                    setState(() => this._estaEscribiendo = texto != '' && texto != null),
                 decoration: InputDecoration.collapsed(
                   hintText: 'Escribe tu mensaje',
                 ),
@@ -118,6 +150,11 @@ class _ChatPageState extends State<ChatPage> {
   }
 
   void _manejarEnvioMensaje(String mensaje) {
+    final message = new MessageChat(texto: mensaje, uuid: '123');
+    setState(() {
+      this.messagesChat.insert(0, message);
+      this._estaEscribiendo = false;
+    });
     this._textController.clear();
     this._focusNode.requestFocus();
   }

@@ -4,3 +4,4 @@ export 'package:secret_chat_mobile/widgets/labels.dart';
 export 'package:secret_chat_mobile/widgets/logo.dart';
 export 'package:secret_chat_mobile/widgets/custom_input_field.dart';
 export 'package:secret_chat_mobile/widgets/boton_azul.dart';
+export 'package:secret_chat_mobile/widgets/message_chat.dart';
