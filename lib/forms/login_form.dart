@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:secret_chat_mobile/services/auth_service.dart';
 
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
@@ -39,8 +41,14 @@ class _LoginFormState extends State<LoginForm> {
             titulo: 'Ingresar',
             onPressed: () {
               print('Valores: ');
-              print(this.emailTextController.value);
-              print(this.passwordTextController.value);
+              print(this.emailTextController.text);
+              print(this.passwordTextController.text);
+
+              final authService =
+                  Provider.of<AuthService>(context, listen: false);
+
+              authService.login(this.emailTextController.text,
+                  this.passwordTextController.text);
             },
           )
         ],
