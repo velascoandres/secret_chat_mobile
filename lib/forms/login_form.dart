@@ -4,6 +4,7 @@ import 'package:secret_chat_mobile/services/auth_service.dart';
 
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
+import 'package:secret_chat_mobile/helpers/mostrar_alerta.dart';
 class LoginForm extends StatefulWidget {
   LoginForm({Key key}) : super(key: key);
 
@@ -40,16 +41,26 @@ class _LoginFormState extends State<LoginForm> {
           ),
           BotonAzul(
             titulo: 'Ingresar',
-            onPressed: authService.autenticando
-                ? null
-                : () {
-                    FocusScope.of(context).unfocus();
-                    authService.login(this.emailTextController.text,
-                        this.passwordTextController.text);
-                  },
+            onPressed: this._manejarLogin(context, authService),
           )
         ],
       ),
     );
+  }
+
+  Function _manejarLogin(BuildContext context, AuthService authService) {
+    if (authService.autenticando) return null;
+    return () async {
+      FocusScope.of(context).unfocus();
+      final loginOK = await authService.login(
+        this.emailTextController.text,
+        this.passwordTextController.text,
+      );
+      if (loginOK) {
+        // Navegar a la otra pantalla
+      } else {
+        mostrarAlerta(context, 'Login incorrecto', 'Credenciales inválidas');
+      }
+    };
   }
 }
