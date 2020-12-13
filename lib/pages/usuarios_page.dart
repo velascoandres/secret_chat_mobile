@@ -13,12 +13,12 @@ class _UsuariosPageState extends State<UsuariosPage> {
   RefreshController _refreshController = new RefreshController();
 
   final usuarios = [
-    Usuario(uid: '1', nombre: 'Maria', email: 'marial@test.com', online: true),
+    Usuario(id: '1', nombre: 'Maria', email: 'marial@test.com', online: true),
     Usuario(
-        uid: '2', nombre: 'Fernando', email: 'marial@test.com', online: true),
+        id: '2', nombre: 'Fernando', email: 'marial@test.com', online: true),
     Usuario(
-        uid: '3', nombre: 'Andres', email: 'marial@test.com', online: false),
-    Usuario(uid: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
+        id: '3', nombre: 'Andres', email: 'marial@test.com', online: false),
+    Usuario(id: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
   ];
   @override
   Widget build(BuildContext context) {
@@ -93,7 +93,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
     );
     this.usuarios.add(
           Usuario(
-              uid: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
+              id: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
         );
     setState(() {});
     _refreshController.refreshCompleted();

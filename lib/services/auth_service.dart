@@ -9,10 +9,20 @@ import 'package:secret_chat_mobile/models/usuario.dart';
 
 class AuthService with ChangeNotifier {
   Usuario usuario;
+  bool _autenticando = false;
 
   final String url = '${Environment.domain}/auth';
 
+  bool get autenticando => this._autenticando;
+
+  set autenticando(bool valor) {
+    this._autenticando = valor;
+    notifyListeners();
+  }
+
   Future login(String email, String password) async {
+    this.autenticando = true;
+
     final data = {
       'email': email,
       'password': password,
@@ -21,10 +31,12 @@ class AuthService with ChangeNotifier {
       '$url/login',
       body: json.encode(data),
     );
+    print(response.body);
     if (response.statusCode == 200) {
       final loginResponse =
           LoginResponse.fromJson(response.body as Map<String, dynamic>);
       this.usuario = loginResponse.user;
     }
+    this.autenticando = false;
   }
 }
