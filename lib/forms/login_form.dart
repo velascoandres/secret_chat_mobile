@@ -5,6 +5,7 @@ import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
 import 'package:secret_chat_mobile/helpers/mostrar_alerta.dart';
+
 class LoginForm extends StatefulWidget {
   LoginForm({Key key}) : super(key: key);
 
@@ -58,6 +59,7 @@ class _LoginFormState extends State<LoginForm> {
       );
       if (loginOK) {
         // Navegar a la otra pantalla
+        Navigator.pushReplacementNamed(context, 'usuarios');
       } else {
         mostrarAlerta(context, 'Login incorrecto', 'Credenciales inválidas');
       }

@@ -33,20 +33,15 @@ class AuthService with ChangeNotifier {
       'email': email,
       'password': password,
     };
-    final response = await http.post(
-      '$url/login',
-      body: jsonEncode(data),
-      headers: {
-        'Content-Type': 'application/json',
-      }
-    );
-    print('$url/login');
-    print(json.encode(data));
-    print(response.body);
-    final bool autentificado = response.statusCode == 200;
+    final response =
+        await http.post('$url/login', body: jsonEncode(data), headers: {
+      'Content-Type': 'application/json',
+    });
+    final bool autentificado =
+        response.statusCode == 200 || response.statusCode == 201;
     if (autentificado) {
-      final loginResponse =
-          LoginResponse.fromJson(response.body as Map<String, dynamic>);
+      final loginResponse = LoginResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
       this.usuario = loginResponse.user;
       this._guardarToken(loginResponse.accessToken);
     }
