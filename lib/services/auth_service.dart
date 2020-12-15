@@ -44,13 +44,14 @@ class AuthService with ChangeNotifier {
       final loginResponse = LoginResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
       this.usuario = loginResponse.user;
-      this._guardarToken(loginResponse.accessToken);
+      this._guardarToken(loginResponse.accessToken, loginResponse.refreshToken);
     }
     this.autenticando = false;
     return autentificado;
   }
 
-  Future<ReisterReponse> register(String username, String email, String password) async {
+  Future<ReisterReponse> register(
+      String username, String email, String password) async {
     this.autenticando = true;
 
     final data = {
@@ -67,19 +68,50 @@ class AuthService with ChangeNotifier {
         response.statusCode == 200 || response.statusCode == 201;
     this.autenticando = false;
     final registerResponse = ReisterReponse.fromJson(
-          jsonDecode(response.body) as Map<String, dynamic>);
+        jsonDecode(response.body) as Map<String, dynamic>);
     if (registroOk) {
       this.usuario = registerResponse.user;
-      this._guardarToken(registerResponse.accessToken);
+      this._guardarToken(
+          registerResponse.accessToken, registerResponse.refreshToken);
     }
     return registerResponse;
   }
 
-  Future _guardarToken(String token) async {
+  Future _guardarToken(String token, String refreshToken) async {
+    await this.storage.write(key: 'refreshToken', value: refreshToken);
     return await this.storage.write(key: 'token', value: token);
   }
 
   Future logout() async {
+    await this.storage.delete(key: 'refreshToken');
     return await this.storage.delete(key: 'token');
+  }
+
+  Future<bool> isLoggedIn() async {
+    final refreshToken = await this.storage.read(key: 'refreshToken');
+    if (refreshToken == null) return false;
+    final data = {
+      'refreshToken': refreshToken,
+    };
+    final response = await http.post(
+      '$url/refresh-token',
+      body: jsonEncode(data),
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    );
+
+    final bool refrescadoOK =
+        response.statusCode == 200 || response.statusCode == 201;
+    this.autenticando = false;
+    final registerResponse = LoginResponse.fromJson(
+        jsonDecode(response.body) as Map<String, dynamic>);
+    if (refrescadoOK) {
+      this.usuario = registerResponse.user;
+      this._guardarToken(
+          registerResponse.accessToken, registerResponse.refreshToken);
+      return true;
+    }
+    return false;
   }
 }
