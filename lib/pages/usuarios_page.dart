@@ -28,14 +28,19 @@ class _UsuariosPageState extends State<UsuariosPage> {
     this.usuario = authService.usuario;
     return Scaffold(
       appBar: AppBar(
-        title: Text(
-          '${usuario.username}',
-          style: TextStyle(color: Colors.black54),
+        title: Center(
+          child: Text(
+            '${usuario.username}',
+            style: TextStyle(color: Colors.black54),
+          ),
         ),
         elevation: 1,
         backgroundColor: Colors.white,
         leading: IconButton(
-          icon: Icon(Icons.exit_to_app, color: Colors.redAccent,),
+          icon: Icon(
+            Icons.exit_to_app,
+            color: Colors.redAccent,
+          ),
           onPressed: () {
             // TODO: Desconectarnos del socket server
             authService.logout();
