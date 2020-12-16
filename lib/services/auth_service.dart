@@ -67,14 +67,20 @@ class AuthService with ChangeNotifier {
     final bool registroOk =
         response.statusCode == 200 || response.statusCode == 201;
     this.autenticando = false;
-    final registerResponse = ReisterReponse.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>);
+    final decodedResponse = jsonDecode(response.body);
     if (registroOk) {
+      final registerResponse =
+          ReisterReponse.fromJson(decodedResponse as Map<String, dynamic>);
       this.usuario = registerResponse.user;
       this._guardarToken(
           registerResponse.accessToken, registerResponse.refreshToken);
+      return registerResponse;
     }
-    return registerResponse;
+    return ReisterReponse(
+      error: true,
+      statusCode: response.statusCode,
+      errors: decodedResponse['errors'],
+    );
   }
 
   Future _guardarToken(String token, String refreshToken) async {
@@ -100,13 +106,13 @@ class AuthService with ChangeNotifier {
         'Content-Type': 'application/json',
       },
     );
-
     final bool refrescadoOK =
         response.statusCode == 200 || response.statusCode == 201;
     this.autenticando = false;
-    final registerResponse = LoginResponse.fromJson(
-        jsonDecode(response.body) as Map<String, dynamic>);
+
     if (refrescadoOK) {
+      final registerResponse = LoginResponse.fromJson(
+          jsonDecode(response.body) as Map<String, dynamic>);
       this.usuario = registerResponse.user;
       this._guardarToken(
           registerResponse.accessToken, registerResponse.refreshToken);
