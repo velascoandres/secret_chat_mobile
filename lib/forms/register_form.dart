@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:secret_chat_mobile/helpers/mostrar_alerta.dart';
 import 'package:secret_chat_mobile/models/register_response.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
+import 'package:secret_chat_mobile/services/socket_service.dart';
 
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
@@ -23,6 +24,7 @@ class _RegisterFormState extends State<RegisterForm> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: true);
+    final SocketService socketService = Provider.of<SocketService>(context);
 
     return Container(
       margin: EdgeInsets.only(
@@ -50,14 +52,16 @@ class _RegisterFormState extends State<RegisterForm> {
           ),
           BotonAzul(
             titulo: 'Ingresar',
-            onPressed: this._manejarRegistro(context, authService),
+            onPressed:
+                this._manejarRegistro(context, authService, socketService),
           ),
         ],
       ),
     );
   }
 
-  Function _manejarRegistro(BuildContext context, AuthService authService) {
+  Function _manejarRegistro(BuildContext context, AuthService authService,
+      SocketService socketService) {
     if (authService.autenticando) return null;
     return () async {
       FocusScope.of(context).unfocus();
@@ -68,6 +72,7 @@ class _RegisterFormState extends State<RegisterForm> {
           await authService.register(username, email, password);
       if (registroOk.user != null) {
         // Navegar a la otra pantalla
+        socketService.connect();
         Navigator.pushReplacementNamed(context, 'usuarios');
       } else {
         mostrarAlerta(context, 'Registro incorrecto',

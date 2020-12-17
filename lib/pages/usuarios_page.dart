@@ -5,6 +5,8 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 
 import 'package:secret_chat_mobile/models/usuario.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
+import 'package:secret_chat_mobile/services/socket_service.dart';
+import 'package:socket_io_client/socket_io_client.dart';
 
 class UsuariosPage extends StatefulWidget {
   @override
@@ -25,6 +27,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   @override
   Widget build(BuildContext context) {
     final AuthService authService = Provider.of<AuthService>(context);
+    final SocketService socketService = Provider.of<SocketService>(context);
     this.usuario = authService.usuario;
     return Scaffold(
       appBar: AppBar(
@@ -42,7 +45,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
             color: Colors.redAccent,
           ),
           onPressed: () {
-            // TODO: Desconectarnos del socket server
+            socketService.disconnect();
             authService.logout();
             Navigator.pushReplacementNamed(context, 'login');
           },
