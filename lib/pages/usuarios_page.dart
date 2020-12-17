@@ -55,7 +55,9 @@ class _UsuariosPageState extends State<UsuariosPage> {
             margin: EdgeInsets.only(right: 10),
             child: Icon(
               Icons.check_circle,
-              color: Colors.blue[400],
+              color: socketService.serverStatus == ServerStatus.Online
+                  ? Colors.blue[400]
+                  : Colors.redAccent,
             ),
             // child: Icon(
             //   Icons.offline_bolt,
