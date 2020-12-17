@@ -62,7 +62,7 @@ class _RegisterFormState extends State<RegisterForm> {
     return () async {
       FocusScope.of(context).unfocus();
       final email = this.emailTextController.text;
-      final password = this.emailTextController.text;
+      final password = this.passwordTextController.text;
       final username = this.nombreTextController.text;
       final ReisterReponse registroOk =
           await authService.register(username, email, password);

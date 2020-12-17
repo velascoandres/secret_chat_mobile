@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
+import 'package:secret_chat_mobile/services/socket_service.dart';
 
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
@@ -21,6 +22,7 @@ class _LoginFormState extends State<LoginForm> {
   @override
   Widget build(BuildContext context) {
     final authService = Provider.of<AuthService>(context, listen: true);
+    final socketService = Provider.of<SocketService>(context);
     return Container(
       margin: EdgeInsets.only(
         top: 40,
@@ -42,14 +44,15 @@ class _LoginFormState extends State<LoginForm> {
           ),
           BotonAzul(
             titulo: 'Ingresar',
-            onPressed: this._manejarLogin(context, authService),
+            onPressed: this._manejarLogin(context, authService, socketService),
           )
         ],
       ),
     );
   }
 
-  Function _manejarLogin(BuildContext context, AuthService authService) {
+  Function _manejarLogin(BuildContext context, AuthService authService,
+      SocketService socketService) {
     if (authService.autenticando) return null;
     return () async {
       FocusScope.of(context).unfocus();
@@ -59,6 +62,7 @@ class _LoginFormState extends State<LoginForm> {
       );
       if (loginOK) {
         // Navegar a la otra pantalla
+        socketService.connect();
         Navigator.pushReplacementNamed(context, 'usuarios');
       } else {
         mostrarAlerta(context, 'Login incorrecto', 'Credenciales inválidas');

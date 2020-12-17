@@ -38,6 +38,8 @@ class AuthService with ChangeNotifier {
         await http.post('$url/login', body: jsonEncode(data), headers: {
       'Content-Type': 'application/json',
     });
+    print(response.body);
+    print(response.statusCode);
     final bool autentificado =
         response.statusCode == 200 || response.statusCode == 201;
     if (autentificado) {
