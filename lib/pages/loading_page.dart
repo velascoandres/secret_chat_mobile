@@ -37,7 +37,7 @@ class LoadingPage extends StatelessWidget {
         ),
       );
     } else {
-      socketService.disconnect();
+      if (socketService.socket != null) socketService.disconnect();
       Navigator.pushReplacement(
         context,
         PageRouteBuilder(

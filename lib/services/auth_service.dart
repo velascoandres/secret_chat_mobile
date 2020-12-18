@@ -15,11 +15,11 @@ class AuthService with ChangeNotifier {
 
   final String url = '${Environment.domain}/auth';
 
-  final storage = new FlutterSecureStorage();
+  static final storage = new FlutterSecureStorage();
 
   bool get autenticando => this._autenticando;
 
-  get token => this.storage.read(key: 'token');
+  static Future<String> get token => storage.read(key: 'token');
 
   set autenticando(bool valor) {
     this._autenticando = valor;
@@ -86,17 +86,17 @@ class AuthService with ChangeNotifier {
   }
 
   Future _guardarToken(String token, String refreshToken) async {
-    await this.storage.write(key: 'refreshToken', value: refreshToken);
-    return await this.storage.write(key: 'token', value: token);
+    await storage.write(key: 'refreshToken', value: refreshToken);
+    return await storage.write(key: 'token', value: token);
   }
 
   Future logout() async {
-    await this.storage.delete(key: 'refreshToken');
-    return await this.storage.delete(key: 'token');
+    await storage.delete(key: 'refreshToken');
+    return await storage.delete(key: 'token');
   }
 
   Future<bool> isLoggedIn() async {
-    final refreshToken = await this.storage.read(key: 'refreshToken');
+    final refreshToken = await storage.read(key: 'refreshToken');
     if (refreshToken == null) return false;
     final data = {
       'refreshToken': refreshToken,
@@ -111,7 +111,7 @@ class AuthService with ChangeNotifier {
     final bool refrescadoOK =
         response.statusCode == 200 || response.statusCode == 201;
     this.autenticando = false;
-
+    print(response.statusCode);
     if (refrescadoOK) {
       final registerResponse = LoginResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
