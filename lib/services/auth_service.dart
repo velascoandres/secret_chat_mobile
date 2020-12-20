@@ -19,7 +19,10 @@ class AuthService with ChangeNotifier {
 
   bool get autenticando => this._autenticando;
 
-  static Future<String> get token => storage.read(key: 'token');
+  static Future<String> get token {
+      final storage = new FlutterSecureStorage();
+      return storage.read(key: 'token');
+  }
 
   set autenticando(bool valor) {
     this._autenticando = valor;
@@ -46,7 +49,7 @@ class AuthService with ChangeNotifier {
       final loginResponse = LoginResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
       this.usuario = loginResponse.user;
-      this._guardarToken(loginResponse.accessToken, loginResponse.refreshToken);
+      await this._guardarToken(loginResponse.accessToken, loginResponse.refreshToken);
     }
     this.autenticando = false;
     return autentificado;
@@ -74,7 +77,7 @@ class AuthService with ChangeNotifier {
       final registerResponse =
           ReisterReponse.fromJson(decodedResponse as Map<String, dynamic>);
       this.usuario = registerResponse.user;
-      this._guardarToken(
+      await this._guardarToken(
           registerResponse.accessToken, registerResponse.refreshToken);
       return registerResponse;
     }
@@ -87,6 +90,7 @@ class AuthService with ChangeNotifier {
 
   Future _guardarToken(String token, String refreshToken) async {
     await storage.write(key: 'refreshToken', value: refreshToken);
+    await storage.write(key: 'token', value: token);
     return await storage.write(key: 'token', value: token);
   }
 
