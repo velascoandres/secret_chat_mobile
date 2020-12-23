@@ -6,7 +6,6 @@ import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:secret_chat_mobile/models/usuario.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/services/socket_service.dart';
-import 'package:socket_io_client/socket_io_client.dart';
 
 class UsuariosPage extends StatefulWidget {
   @override
@@ -19,10 +18,10 @@ class _UsuariosPageState extends State<UsuariosPage> {
   RefreshController _refreshController = new RefreshController();
 
   final usuarios = [
-    Usuario(id: '1', nombre: 'Maria', email: 'marial@test.com', online: true),
-    Usuario(id: '2', nombre: 'Marcia', email: 'marial@test.com', online: true),
-    Usuario(id: '3', nombre: 'Andres', email: 'marial@test.com', online: false),
-    Usuario(id: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
+    Usuario(id: '1', username: 'Maria', email: 'marial@test.com', online: true),
+    Usuario(id: '2', username: 'Marcia', email: 'marial@test.com', online: true),
+    Usuario(id: '3', username: 'Andres', email: 'marial@test.com', online: false),
+    Usuario(id: '4', username: 'Pepe', email: 'marial@test.com', online: true),
   ];
   @override
   Widget build(BuildContext context) {
@@ -86,11 +85,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
 
   ListTile _buildUserListTile(Usuario usuario) {
     return ListTile(
-      title: Text(usuario.nombre),
-      subtitle: Text(usuario.nombre),
+      title: Text(usuario.username),
+      subtitle: Text(usuario.username),
       leading: CircleAvatar(
         child: Text(
-          usuario.nombre.substring(0, 2),
+          usuario.username.substring(0, 2),
         ),
         backgroundColor: Colors.blue[100],
       ),
@@ -111,7 +110,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
     );
     this.usuarios.add(
           Usuario(
-              id: '4', nombre: 'Pepe', email: 'marial@test.com', online: true),
+              id: '4', username: 'Pepe', email: 'marial@test.com', online: true),
         );
     setState(() {});
     _refreshController.refreshCompleted();

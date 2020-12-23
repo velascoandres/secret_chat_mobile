@@ -1,24 +1,26 @@
-class Usuario {
+import 'package:secret_chat_mobile/models/principal_model.dart';
+
+class Usuario extends PrincipalModel {
   bool online;
   String email;
-  String nombre;
-  String uid;
   String username;
-  String id;
 
   Usuario({
     this.online,
     this.email,
-    this.nombre,
-    this.uid,
     this.username,
-    this.id
-  });
+    String id,
+    DateTime createdAt,
+    DateTime updatedAt,
+  }) : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
   factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
         username: json["username"],
         id: json["id"],
         email: json["email"],
+        online: json["online"],
+        createdAt: json["createdAt"],
+        updatedAt: json["updatedAt"],
       );
 
   Map<String, dynamic> toJson() => {
