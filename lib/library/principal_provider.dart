@@ -13,6 +13,9 @@ abstract class PrincipalProvider<T extends PrincipalModel> {
   @protected
   final String segmento = '';
 
+  @protected
+  FromJsonCallBack<T> fromJsonCallBack;
+
   Future<bool> create(T model, {Map<String, dynamic> headers}) async {
     final uri = '$url/$segmento';
     final modelParsed = json.encode(model.toJson());
@@ -43,19 +46,18 @@ abstract class PrincipalProvider<T extends PrincipalModel> {
     }
   }
 
-  Future<ApiResponse<T>> findAll(FromJsonCallBack fromJsonCallBack,
+  Future<ApiResponse<T>> findAll(
       {Map<String, dynamic> query, Map<String, dynamic> headers}) async {
-    final uri = '$url/$segmento';
-    final response = await http.get(uri);
+    final queryParams = json.encode(query);
+    final uri = '$url/$segmento?query=$queryParams';
+    final response = await http.get(uri, headers: headers);
 
     // Handling response
     try {
       final Map<String, dynamic> decodedData = json.decode(response.body);
-
       if (response.statusCode == 200 || response.statusCode == 201) {
         if (decodedData == null) return null;
-
-        return ApiResponse.fromJson(decodedData, fromJsonCallBack);
+        return ApiResponse.fromJson(decodedData, this.fromJsonCallBack);
       }
       return null;
     } catch (error) {
@@ -66,7 +68,6 @@ abstract class PrincipalProvider<T extends PrincipalModel> {
 
   Future<bool> delete(String id, {Map<String, dynamic> headers}) async {
     final uri = '$url/$segmento/$id';
-    print(uri);
     try {
       final response = await http.delete(uri);
       if (response.statusCode == 200) return true;

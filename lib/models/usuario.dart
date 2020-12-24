@@ -10,11 +10,11 @@ class Usuario extends PrincipalModel {
     this.email,
     this.username,
     String id,
-    DateTime createdAt,
-    DateTime updatedAt,
+    String createdAt,
+    String updatedAt,
   }) : super(id: id, createdAt: createdAt, updatedAt: updatedAt);
 
-  factory Usuario.fromJson(Map<String, dynamic> json) => Usuario(
+  static Usuario fromJson(Map<String, dynamic> json) => Usuario(
         username: json["username"],
         id: json["id"],
         email: json["email"],

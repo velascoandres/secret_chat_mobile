@@ -2,10 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import 'package:pull_to_refresh/pull_to_refresh.dart';
+import 'package:secret_chat_mobile/library/api_response.dart';
 
 import 'package:secret_chat_mobile/models/usuario.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/services/socket_service.dart';
+import 'package:secret_chat_mobile/services/usuario_rest_service.dart';
 
 class UsuariosPage extends StatefulWidget {
   @override
@@ -14,15 +16,11 @@ class UsuariosPage extends StatefulWidget {
 
 class _UsuariosPageState extends State<UsuariosPage> {
   Usuario usuario;
+  final usuarioService = new UsuarioRestService();
 
   RefreshController _refreshController = new RefreshController();
 
-  final usuarios = [
-    Usuario(id: '1', username: 'Maria', email: 'marial@test.com', online: true),
-    Usuario(id: '2', username: 'Marcia', email: 'marial@test.com', online: true),
-    Usuario(id: '3', username: 'Andres', email: 'marial@test.com', online: false),
-    Usuario(id: '4', username: 'Pepe', email: 'marial@test.com', online: true),
-  ];
+  List<Usuario> usuarios = [];
   @override
   Widget build(BuildContext context) {
     final AuthService authService = Provider.of<AuthService>(context);
@@ -86,7 +84,7 @@ class _UsuariosPageState extends State<UsuariosPage> {
   ListTile _buildUserListTile(Usuario usuario) {
     return ListTile(
       title: Text(usuario.username),
-      subtitle: Text(usuario.username),
+      subtitle: Text(usuario.email),
       leading: CircleAvatar(
         child: Text(
           usuario.username.substring(0, 2),
@@ -105,13 +103,23 @@ class _UsuariosPageState extends State<UsuariosPage> {
   }
 
   _cargarUsuarios() async {
-    await Future.delayed(
-      Duration(milliseconds: 1000),
-    );
-    this.usuarios.add(
-          Usuario(
-              id: '4', username: 'Pepe', email: 'marial@test.com', online: true),
-        );
+    final token = await AuthService.token;
+
+    final headers = {
+      'authorization': 'Bearer $token',
+    };
+
+    final query = {
+      'where': {
+        'online': true,
+        'id': {'\$ne': this.usuario.id},
+      }
+    };
+    final ApiResponse<Usuario> respuesta =
+        await this.usuarioService.findAll(query: query, headers: headers);
+
+    this.usuarios = respuesta.data;
+
     setState(() {});
     _refreshController.refreshCompleted();
   }
