@@ -1,4 +1,4 @@
-import 'package:secret_chat_mobile/models/principal_model.dart';
+import 'package:secret_chat_mobile/library/principal_model.dart';
 
 class ApiResponse<T extends PrincipalModel> {
     ApiResponse({
