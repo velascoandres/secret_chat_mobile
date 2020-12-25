@@ -25,7 +25,7 @@ class SocketService with ChangeNotifier {
       'forceNew': true,
       'extraHeaders': {
         'authorization': 'Bearer $token'
-      }
+      },
     });
 
     this._socket.on('connect', (_) {

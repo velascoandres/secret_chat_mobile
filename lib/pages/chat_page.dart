@@ -33,6 +33,12 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     this.chatService = Provider.of<ChatService>(context, listen: false);
     this.socketService = Provider.of<SocketService>(context, listen: false);
     this.authService = Provider.of<AuthService>(context, listen: false);
+    this.socketService.socket.on('mensaje-personal', this._escucharMensaje);
+  }
+
+  _escucharMensaje(dynamic data) {
+    print('tengo un mensaje');
+    print(data);
   }
 
   @override
@@ -162,7 +168,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
       {
         'emisor': this.authService.usuario.id,
         'destinatario': this.chatService.usuarioPara.id,
-        'mensaje': mensaje,
+        'contenido': mensaje,
       },
     );
   }
