@@ -6,6 +6,7 @@ import 'package:secret_chat_mobile/library/api_response.dart';
 
 import 'package:secret_chat_mobile/models/usuario.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
+import 'package:secret_chat_mobile/services/chat_service.dart';
 import 'package:secret_chat_mobile/services/socket_service.dart';
 import 'package:secret_chat_mobile/services/usuario_rest_service.dart';
 
@@ -65,23 +66,23 @@ class _UsuariosPageState extends State<UsuariosPage> {
       ),
       body: SmartRefresher(
         controller: this._refreshController,
-        child: _buildUsersListView(),
+        child: _buildUsersListView(context),
         enablePullDown: true,
         onRefresh: this._cargarUsuarios,
       ),
     );
   }
 
-  ListView _buildUsersListView() {
+  ListView _buildUsersListView(BuildContext context) {
     return ListView.separated(
       physics: BouncingScrollPhysics(),
-      itemBuilder: (_, i) => _buildUserListTile(usuarios[i]),
+      itemBuilder: (_, i) => _buildUserListTile(context, usuarios[i]),
       separatorBuilder: (_, i) => Divider(),
       itemCount: this.usuarios.length,
     );
   }
 
-  ListTile _buildUserListTile(Usuario usuario) {
+  ListTile _buildUserListTile(BuildContext context, Usuario usuario) {
     return ListTile(
       title: Text(usuario.username),
       subtitle: Text(usuario.email),
@@ -99,6 +100,12 @@ class _UsuariosPageState extends State<UsuariosPage> {
           borderRadius: BorderRadius.circular(100),
         ),
       ),
+      onTap: () {
+        final ChatService chatService = Provider.of<ChatService>(context, listen: false);
+        chatService.usuarioPara = usuario;
+        print('aqui');
+        Navigator.pushNamed(context, 'chat');
+      },
     );
   }
 
@@ -108,12 +115,11 @@ class _UsuariosPageState extends State<UsuariosPage> {
     final headers = {
       'authorization': 'Bearer $token',
     };
-
     final query = {
       'where': {
         'online': true,
         'id': {'\$ne': this.usuario.id},
-      }
+      },
     };
     final ApiResponse<Usuario> respuesta =
         await this.usuarioService.findAll(query: query, headers: headers);

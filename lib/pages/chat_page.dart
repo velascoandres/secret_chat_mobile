@@ -2,6 +2,10 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'package:secret_chat_mobile/models/usuario.dart';
+import 'package:secret_chat_mobile/services/chat_service.dart';
+import 'package:secret_chat_mobile/services/chat_service.dart';
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
 class ChatPage extends StatefulWidget {
@@ -13,58 +17,34 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
   final TextEditingController _textController = new TextEditingController();
   final FocusNode _focusNode = new FocusNode();
 
-  List<MessageChat> messagesChat = [
-    // MessageChat(
-    //   uuid: '123',
-    //   texto: 'Hola mundasdasdasdo',
-    // ),
-    // MessageChat(
-    //   uuid: '122',
-    //   texto:
-    //       'Holahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh muasdasdndo',
-    // ),
-    // MessageChat(
-    //   uuid: '123',
-    //   texto:
-    //       'Holahhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhhh muasdasdndo',
-    // ),
-    // MessageChat(
-    //   uuid: '123',
-    //   texto: 'Hola munssdsdsddo x2',
-    // ),
-    // MessageChat(
-    //   uuid: '123',
-    //   texto: 'Hola madasdundo x2',
-    // ),
-    // MessageChat(
-    //   uuid: '123',
-    //   texto: 'Hola muadasdasdndo x2',
-    // ),
-  ];
+  List<MessageChat> messagesChat = [];
 
   bool _estaEscribiendo = false;
 
   @override
   Widget build(BuildContext context) {
+
+    final ChatService chatService  = Provider.of<ChatService>(context);
+    final Usuario usuarioPara = chatService.usuarioPara;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
         title: Row(
-          mainAxisAlignment: MainAxisAlignment.start,
           children: [
             CircleAvatar(
               child: Text(
-                'Te',
+                usuarioPara.username.substring(0,2),
                 style: TextStyle(fontSize: 12),
               ),
               backgroundColor: Colors.blue[100],
               maxRadius: 14,
             ),
             SizedBox(
+              height: 3,
               width: 10,
             ),
             Text(
-              'Melissa Flores',
+              usuarioPara.username,
               style: TextStyle(color: Colors.black87, fontSize: 12),
             )
           ],
