@@ -4,8 +4,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:secret_chat_mobile/models/usuario.dart';
+import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/services/chat_service.dart';
-import 'package:secret_chat_mobile/services/chat_service.dart';
+import 'package:secret_chat_mobile/services/socket_service.dart';
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
 
 class ChatPage extends StatefulWidget {
@@ -21,11 +22,22 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   bool _estaEscribiendo = false;
 
+  ChatService chatService;
+  SocketService socketService;
+  AuthService authService;
+  Usuario usuarioPara;
+
+  @override
+  void initState() {
+    super.initState();
+    this.chatService = Provider.of<ChatService>(context, listen: false);
+    this.socketService = Provider.of<SocketService>(context, listen: false);
+    this.authService = Provider.of<AuthService>(context, listen: false);
+  }
+
   @override
   Widget build(BuildContext context) {
-
-    final ChatService chatService  = Provider.of<ChatService>(context);
-    final Usuario usuarioPara = chatService.usuarioPara;
+    this.usuarioPara = chatService.usuarioPara;
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.white,
@@ -33,7 +45,7 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
           children: [
             CircleAvatar(
               child: Text(
-                usuarioPara.username.substring(0,2),
+                usuarioPara.username.substring(0, 2),
                 style: TextStyle(fontSize: 12),
               ),
               backgroundColor: Colors.blue[100],
@@ -144,6 +156,15 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     });
     this._textController.clear();
     this._focusNode.requestFocus();
+
+    this.socketService.emit(
+      'mensaje-personal',
+      {
+        'emisor': this.authService.usuario.id,
+        'destinatario': this.chatService.usuarioPara.id,
+        'mensaje': mensaje,
+      },
+    );
   }
 
   @override
