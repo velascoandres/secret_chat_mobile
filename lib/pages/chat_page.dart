@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:secret_chat_mobile/models/chat_message.dart';
 import 'package:secret_chat_mobile/models/usuario.dart';
 import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/services/chat_service.dart';
@@ -38,7 +39,20 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   _escucharMensaje(dynamic data) {
     print('tengo un mensaje');
-    print(data);
+    ChatMessage chatMessage = ChatMessage.fromJson(data);
+    MessageChat mensajeWidget = MessageChat(
+      texto: chatMessage.contenido,
+      uuid: chatMessage.emisor,
+      animationController: AnimationController(
+        vsync: this,
+        duration: Duration(milliseconds: 300),
+      ),
+    );
+
+    setState(() {
+      this.messagesChat.insert(0, mensajeWidget);
+    });
+    mensajeWidget.animationController.forward();
   }
 
   @override
@@ -175,11 +189,11 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
 
   @override
   void dispose() {
-    // TODO:  Off del socket
     this.messagesChat.forEach(
           (MessageChat messageChat) =>
               messageChat.animationController.dispose(),
         );
+    this.socketService.socket.off('mensaje-personal');
     super.dispose();
   }
 }
