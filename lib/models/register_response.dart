@@ -21,8 +21,8 @@ class ReisterReponse extends LoginResponse {
       error: json['error'],
       statusCode: json['statusCode'],
       errors: json['errors'],
-      refreshToken: json['refreshToken'],
-      accessToken: json['accessToken'],
+      refreshToken: json['refresh_token'],
+      accessToken: json['access_token'],
       user: Usuario.fromJson(json['user']),
     );
   }

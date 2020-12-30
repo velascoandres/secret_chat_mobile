@@ -20,8 +20,8 @@ class AuthService with ChangeNotifier {
   bool get autenticando => this._autenticando;
 
   static Future<String> get token {
-      final storage = new FlutterSecureStorage();
-      return storage.read(key: 'token');
+    final storage = new FlutterSecureStorage();
+    return storage.read(key: 'token');
   }
 
   set autenticando(bool valor) {
@@ -49,7 +49,8 @@ class AuthService with ChangeNotifier {
       final loginResponse = LoginResponse.fromJson(
           jsonDecode(response.body) as Map<String, dynamic>);
       this.usuario = loginResponse.user;
-      await this._guardarToken(loginResponse.accessToken, loginResponse.refreshToken);
+      await this
+          ._guardarToken(loginResponse.accessToken, loginResponse.refreshToken);
     }
     this.autenticando = false;
     return autentificado;
