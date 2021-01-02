@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import 'package:secret_chat_mobile/services/auth_service.dart';
 import 'package:secret_chat_mobile/services/socket_service.dart';
-
 import 'package:secret_chat_mobile/widgets/widgets_index.dart';
-
 import 'package:secret_chat_mobile/helpers/mostrar_alerta.dart';
 
 class LoginForm extends StatefulWidget {

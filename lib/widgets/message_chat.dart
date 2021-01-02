@@ -6,12 +6,14 @@ class MessageChat extends StatelessWidget {
   final String texto;
   final String uuid;
   final AnimationController animationController;
+  final bool myMessage;
 
   const MessageChat({
     Key key,
     @required this.texto,
     @required this.uuid,
     @required this.animationController,
+    this.myMessage = true,
   }) : super(key: key);
 
   @override
@@ -25,7 +27,7 @@ class MessageChat extends StatelessWidget {
           curve: Curves.easeInOut,
         ),
         child: Container(
-          child: _myMessage(context: context, myMessage: this.uuid == '123'),
+          child: _myMessage(context: context),
         ),
       ),
     );
@@ -33,11 +35,10 @@ class MessageChat extends StatelessWidget {
 
   Widget _myMessage({
     BuildContext context,
-    bool myMessage = true,
   }) {
     final maxWidth = MediaQuery.of(context).size.width * 0.5;
     return Align(
-      alignment: myMessage ? Alignment.centerRight : Alignment.centerLeft,
+      alignment: this.myMessage ? Alignment.centerRight : Alignment.centerLeft,
       child: Container(
         constraints: BoxConstraints(minWidth: 10, maxWidth: maxWidth),
         margin: EdgeInsets.only(

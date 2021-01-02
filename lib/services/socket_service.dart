@@ -18,26 +18,32 @@ class SocketService with ChangeNotifier {
   void connect() async {
     final token = await AuthService.token;
     // Dart client
-    print('conectando...');
-    this._socket = IO.io('${Environment.domainWS}/chat', {
-      'transports': ['websocket'],
-      'autoConnect': true,
-      'forceNew': true,
-      'extraHeaders': {
-        'authorization': 'Bearer $token'
+    this._socket = IO.io(
+      '${Environment.domainWS}/chat',
+      {
+        'transports': ['websocket'],
+        'autoConnect': true,
+        'forceNew': true,
+        'extraHeaders': {'authorization': 'Bearer $token'},
       },
-    });
+    );
 
-    this._socket.on('connect', (_) {
-      print('conectado a chat');
-      this._serverStatus = ServerStatus.Online;
-      notifyListeners();
-    });
+    this._socket.on(
+      'connect',
+      (_) {
+        print('conectado a chat');
+        this._serverStatus = ServerStatus.Online;
+        notifyListeners();
+      },
+    );
 
-    this._socket.on('disconnect', (_) {
-      this._serverStatus = ServerStatus.Offline;
-      notifyListeners();
-    });
+    this._socket.on(
+      'disconnect',
+      (_) {
+        this._serverStatus = ServerStatus.Offline;
+        notifyListeners();
+      },
+    );
   }
 
   void disconnect() {

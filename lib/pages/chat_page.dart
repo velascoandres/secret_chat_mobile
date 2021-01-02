@@ -35,18 +35,21 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
     this.socketService = Provider.of<SocketService>(context, listen: false);
     this.authService = Provider.of<AuthService>(context, listen: false);
     this.socketService.socket.on('mensaje-personal', this._escucharMensaje);
+
+    // Cargar mensajes
+    _cargarHistorial(this.chatService.usuarioPara.id);
   }
 
   _escucharMensaje(dynamic data) {
-    print('tengo un mensaje');
     ChatMessage chatMessage = ChatMessage.fromJson(data);
     MessageChat mensajeWidget = MessageChat(
       texto: chatMessage.contenido,
-      uuid: chatMessage.emisor,
+      uuid: chatMessage.id,
       animationController: AnimationController(
         vsync: this,
         duration: Duration(milliseconds: 300),
       ),
+      myMessage: false,
     );
 
     setState(() {
@@ -195,5 +198,22 @@ class _ChatPageState extends State<ChatPage> with TickerProviderStateMixin {
         );
     this.socketService.socket.off('mensaje-personal');
     super.dispose();
+  }
+
+  void _cargarHistorial(String idUsuario) async {
+    final messages = await this.chatService.getBandeja(idUsuario);
+    final messagesWidgets = messages.map(
+            (ChatMessage chatMessage) => MessageChat(
+              texto: chatMessage.contenido,
+              uuid: chatMessage.id,
+              animationController: AnimationController(
+                vsync: this,
+                duration: Duration(milliseconds: 300),
+              ),
+              myMessage: idUsuario != chatMessage.emisor,
+            ),
+          );
+    this.messagesChat.insertAll(0, messagesWidgets);
+    setState(() {});
   }
 }
