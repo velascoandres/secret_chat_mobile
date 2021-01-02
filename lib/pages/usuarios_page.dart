@@ -117,7 +117,6 @@ class _UsuariosPageState extends State<UsuariosPage> {
     };
     final query = {
       'where': {
-        'online': true,
         'id': {'\$ne': this.usuario.id},
       },
     };
